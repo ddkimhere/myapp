@@ -85,10 +85,10 @@ button{font:inherit}.app{display:flex;height:100vh;overflow:hidden}
 <script>
 const tools={
   word:{name:'Word Test',url:'https://ddkimhere.github.io/yms-word-test/',icon:'W',desc:'영어 단어 시험'},
-  evaluation:{name:'Evaluation',url:'https://ymsevaluation.streamlit.app/',icon:'E',desc:'학생 평가 도구'},
+  evaluation:{name:'Evaluation',url:'https://ymsevaluation.streamlit.app/',embedUrl:'https://ymsevaluation.streamlit.app/?embed=true',icon:'E',desc:'학생 평가 도구'},
   grammar:{name:'Grammar',url:'https://ddkimhere.github.io/Grammar-Training/',icon:'G',desc:'문법 시험 생성'},
   monthly:{name:'Monthly Test',url:'https://ddkimhere.github.io/TEST/',icon:'M',desc:'월간 테스트'},
-  moak:{name:'Moak Test',url:'https://mock-modify.streamlit.app/',icon:'M',desc:'모의고사 변형'},
+  moak:{name:'Moak Test',url:'https://mock-modify.streamlit.app/',embedUrl:'https://mock-modify.streamlit.app/?embed=true',icon:'M',desc:'모의고사 변형'},
   book:{name:'Book Review',url:'https://ddkimhere.github.io/book-review/',icon:'B',desc:'독서 활동 및 리뷰'}
 };
 let currentKey='home';
@@ -112,7 +112,7 @@ function openTool(key){
   currentKey=key; setActiveButton(key);
   document.getElementById('homeScreen').style.display='none';
   const frame=document.getElementById('toolFrame');
-  frame.style.display='block'; frame.src=tool.url;
+  frame.style.display='block'; frame.src=tool.embedUrl || tool.url;
   document.getElementById('pageTitle').textContent=tool.name;
   document.getElementById('pageUrl').textContent=tool.url;
   document.getElementById('refreshBtn').style.display='inline-block';
@@ -124,8 +124,10 @@ function openTool(key){
 }
 function refreshCurrent(){
   if(currentKey==='home')return;
-  const frame=document.getElementById('toolFrame'),url=tools[currentKey].url;
-  frame.src='about:blank'; setTimeout(()=>frame.src=url,50);
+  const frame=document.getElementById('toolFrame');
+  const tool=tools[currentKey];
+  const frameUrl=tool.embedUrl || tool.url;
+  frame.src='about:blank'; setTimeout(()=>frame.src=frameUrl,50);
 }
 function openCurrentNewTab(){
   if(currentKey==='home')return;
