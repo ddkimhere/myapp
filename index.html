@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YMS Teacher Tools</title>
+<style>
+:root{--navy:#0f2b46;--navy2:#173f63;--bg:#f4f7fb;--line:#dfe6ee;--text:#172033;--muted:#68758a;--white:#fff;--sidebar:250px}
+*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:Arial,"Noto Sans KR",sans-serif;color:var(--text);background:var(--bg)}
+button{font:inherit}.app{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:var(--sidebar);min-width:var(--sidebar);background:var(--navy);color:#fff;display:flex;flex-direction:column;box-shadow:4px 0 18px rgba(15,43,70,.12);z-index:10}
+.brand{padding:26px 22px 22px;border-bottom:1px solid rgba(255,255,255,.12)}
+.logo{display:flex;align-items:center;gap:12px;font-size:23px;font-weight:800}.logo-mark{width:36px;height:36px;border:2px solid rgba(255,255,255,.9);border-radius:9px;display:grid;place-items:center;font-size:18px}
+.brand small{display:block;margin-top:8px;color:rgba(255,255,255,.65);font-size:11px;letter-spacing:.8px}
+.menu{padding:18px 12px;overflow:auto;flex:1}.menu-title{padding:5px 12px 10px;font-size:10px;font-weight:700;letter-spacing:1.3px;color:rgba(255,255,255,.48)}
+.nav-btn{width:100%;border:0;background:transparent;color:rgba(255,255,255,.82);padding:12px 13px;border-radius:9px;display:flex;align-items:center;gap:11px;cursor:pointer;text-align:left;transition:.18s;margin-bottom:5px;font-size:14px;font-weight:600}
+.nav-btn:hover{background:rgba(255,255,255,.09);color:#fff}.nav-btn.active{background:#fff;color:var(--navy);box-shadow:0 5px 14px rgba(0,0,0,.12)}
+.nav-icon{width:24px;text-align:center;font-size:16px;flex:0 0 24px}.sidebar-footer{padding:16px 18px 18px;color:rgba(255,255,255,.5);font-size:10px;border-top:1px solid rgba(255,255,255,.1)}
+.main{flex:1;min-width:0;height:100vh;display:flex;flex-direction:column}.topbar{height:68px;min-height:68px;background:var(--white);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 22px;gap:16px}
+.top-left{display:flex;align-items:center;gap:12px;min-width:0}.mobile-menu{display:none;border:1px solid var(--line);background:#fff;border-radius:8px;width:38px;height:38px;cursor:pointer;font-size:19px}
+.page-title{font-size:18px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.page-url{margin-top:3px;color:var(--muted);font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:55vw}
+.actions{display:flex;gap:8px;flex-shrink:0}.action-btn{border:1px solid var(--line);background:#fff;color:#334155;border-radius:8px;height:36px;padding:0 12px;cursor:pointer;font-size:12px;font-weight:700}.action-btn:hover{background:#f8fafc}
+.content{flex:1;min-height:0;position:relative;background:var(--bg)}#toolFrame{width:100%;height:100%;border:0;background:#fff;display:none}
+.home{height:100%;overflow:auto;padding:34px}.hero{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border-radius:18px;padding:32px;box-shadow:0 12px 30px rgba(15,43,70,.18);margin-bottom:26px}
+.hero .eyebrow{font-size:11px;font-weight:700;letter-spacing:1.4px;color:rgba(255,255,255,.65);margin-bottom:9px}.hero h1{margin:0;font-size:28px}.hero p{margin:10px 0 0;color:rgba(255,255,255,.75);font-size:13px;line-height:1.6}
+.tools-title{font-size:15px;font-weight:800;margin:0 0 13px 3px}.cards{display:grid;grid-template-columns:repeat(3,minmax(190px,1fr));gap:15px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;cursor:pointer;transition:.18s;min-height:128px;display:flex;flex-direction:column;justify-content:space-between}.card:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(22,34,51,.09);border-color:#cbd5e1}
+.card-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:10px;background:#eff6ff;font-size:18px}.card-name{margin-top:14px;font-weight:800;font-size:14px}.card-sub{margin-top:5px;color:var(--muted);font-size:10px}
+.frame-message{display:none;position:absolute;inset:auto 22px 18px auto;background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;box-shadow:0 8px 20px rgba(0,0,0,.1);color:#475569;font-size:11px;z-index:5}.overlay{display:none}
+@media(max-width:1000px){.cards{grid-template-columns:repeat(2,minmax(190px,1fr))}}
+@media(max-width:760px){.sidebar{position:fixed;left:-260px;top:0;bottom:0;transition:.2s}.sidebar.open{left:0}.mobile-menu{display:block}.overlay{position:fixed;inset:0;background:rgba(0,0,0,.25);z-index:9}.overlay.show{display:block}.home{padding:20px}.cards{grid-template-columns:1fr}.actions .hide-mobile{display:none}.page-url{max-width:45vw}.hero{padding:24px}.hero h1{font-size:23px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><div class="logo"><div class="logo-mark">Y</div><div>YMS Tools</div></div><small>TEACHER WORKSPACE</small></div>
+  <nav class="menu">
+    <div class="menu-title">MAIN</div>
+    <button class="nav-btn active" data-key="home" onclick="openHome()"><span class="nav-icon">⌂</span><span>Home</span></button>
+    <div class="menu-title" style="margin-top:16px">TOOLS</div>
+    <button class="nav-btn" data-key="word" onclick="openTool('word')"><span class="nav-icon">W</span><span>Word Test</span></button>
+    <button class="nav-btn" data-key="evaluation" onclick="openTool('evaluation')"><span class="nav-icon">E</span><span>Evaluation</span></button>
+    <button class="nav-btn" data-key="grammar" onclick="openTool('grammar')"><span class="nav-icon">G</span><span>Grammar</span></button>
+    <button class="nav-btn" data-key="monthly" onclick="openTool('monthly')"><span class="nav-icon">M</span><span>Monthly Test</span></button>
+    <button class="nav-btn" data-key="moak" onclick="openTool('moak')"><span class="nav-icon">M</span><span>Moak Test</span></button>
+    <button class="nav-btn" data-key="book" onclick="openTool('book')"><span class="nav-icon">B</span><span>Book Review</span></button>
+  </nav>
+  <div class="sidebar-footer">YMS Teacher Tools</div>
+</aside>
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<main class="main">
+<header class="topbar">
+  <div class="top-left">
+    <button class="mobile-menu" onclick="toggleSidebar()">☰</button>
+    <div>
+      <div class="page-title" id="pageTitle">Home</div>
+      <div class="page-url" id="pageUrl">YMS Teacher Workspace</div>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="action-btn hide-mobile" id="refreshBtn" onclick="refreshCurrent()" style="display:none">↻ 새로고침</button>
+    <button class="action-btn" id="newTabBtn" onclick="openCurrentNewTab()" style="display:none">↗ 새 창</button>
+  </div>
+</header>
+
+<section class="content">
+  <div class="home" id="homeScreen">
+    <div class="hero">
+      <div class="eyebrow">YMS TEACHER WORKSPACE</div>
+      <h1>YMS Teacher Tools</h1>
+      <p>수업과 평가에 사용하는 도구를 한곳에서 빠르게 열 수 있습니다.<br>왼쪽 메뉴 또는 아래 카드를 선택하세요.</p>
+    </div>
+    <div class="tools-title">도구 바로가기</div>
+    <div class="cards" id="toolCards"></div>
+  </div>
+
+  <iframe id="toolFrame" title="YMS Tool" allow="clipboard-read; clipboard-write; fullscreen" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  <div class="frame-message" id="frameMessage">페이지가 보이지 않으면 우측 상단의 <b>새 창</b> 버튼으로 열어주세요.</div>
+</section>
+</main>
+</div>
+
+<script>
+const tools={
+  word:{name:'Word Test',url:'https://ddkimhere.github.io/yms-word-test/',icon:'W',desc:'영어 단어 시험'},
+  evaluation:{name:'Evaluation',url:'https://ymsevaluation.streamlit.app/',icon:'E',desc:'학생 평가 도구'},
+  grammar:{name:'Grammar',url:'https://ddkimhere.github.io/Grammar-Training/',icon:'G',desc:'문법 시험 생성'},
+  monthly:{name:'Monthly Test',url:'https://ddkimhere.github.io/TEST/',icon:'M',desc:'월간 테스트'},
+  moak:{name:'Moak Test',url:'https://mock-modify.streamlit.app/',icon:'M',desc:'모의고사 변형'},
+  book:{name:'Book Review',url:'https://ddkimhere.github.io/book-review/',icon:'B',desc:'독서 활동 및 리뷰'}
+};
+let currentKey='home';
+
+function setActiveButton(key){
+  document.querySelectorAll('.nav-btn').forEach(btn=>btn.classList.toggle('active',btn.dataset.key===key));
+}
+function openHome(){
+  currentKey='home'; setActiveButton('home');
+  document.getElementById('homeScreen').style.display='block';
+  document.getElementById('toolFrame').style.display='none';
+  document.getElementById('frameMessage').style.display='none';
+  document.getElementById('pageTitle').textContent='Home';
+  document.getElementById('pageUrl').textContent='YMS Teacher Workspace';
+  document.getElementById('refreshBtn').style.display='none';
+  document.getElementById('newTabBtn').style.display='none';
+  closeSidebar();
+}
+function openTool(key){
+  const tool=tools[key]; if(!tool)return;
+  currentKey=key; setActiveButton(key);
+  document.getElementById('homeScreen').style.display='none';
+  const frame=document.getElementById('toolFrame');
+  frame.style.display='block'; frame.src=tool.url;
+  document.getElementById('pageTitle').textContent=tool.name;
+  document.getElementById('pageUrl').textContent=tool.url;
+  document.getElementById('refreshBtn').style.display='inline-block';
+  document.getElementById('newTabBtn').style.display='inline-block';
+  const msg=document.getElementById('frameMessage');
+  msg.style.display='block';
+  setTimeout(()=>{if(currentKey===key)msg.style.display='none'},5500);
+  closeSidebar();
+}
+function refreshCurrent(){
+  if(currentKey==='home')return;
+  const frame=document.getElementById('toolFrame'),url=tools[currentKey].url;
+  frame.src='about:blank'; setTimeout(()=>frame.src=url,50);
+}
+function openCurrentNewTab(){
+  if(currentKey==='home')return;
+  window.open(tools[currentKey].url,'_blank','noopener,noreferrer');
+}
+function renderCards(){
+  document.getElementById('toolCards').innerHTML=Object.entries(tools).map(([key,tool])=>`
+    <div class="card" onclick="openTool('${key}')">
+      <div>
+        <div class="card-icon">${tool.icon}</div>
+        <div class="card-name">${tool.name}</div>
+        <div class="card-sub">${tool.desc}</div>
+      </div>
+    </div>`).join('');
+}
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('show');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+}
+renderCards();
+</script>
+</body>
+</html>
