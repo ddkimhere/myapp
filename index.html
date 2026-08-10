@@ -76,6 +76,21 @@ button{font:inherit}.app{display:flex;height:100vh;overflow:hidden}
     <div class="cards" id="toolCards"></div>
   </div>
 
+  <div id="externalScreen" style="display:none;height:100%;align-items:center;justify-content:center;padding:30px;">
+    <div style="width:min(560px,100%);background:#fff;border:1px solid #dfe6ee;border-radius:18px;padding:38px;box-shadow:0 12px 32px rgba(15,43,70,.08);text-align:center;">
+      <div style="width:58px;height:58px;margin:0 auto 18px;border-radius:16px;background:#eff6ff;display:grid;place-items:center;font-size:25px;font-weight:800;color:#0f2b46;" id="externalIcon">S</div>
+      <div style="font-size:22px;font-weight:800;margin-bottom:10px;" id="externalTitle">Streamlit App</div>
+      <div style="font-size:13px;color:#68758a;line-height:1.7;margin-bottom:24px;">
+        이 앱은 현재 로그인이 필요한 Streamlit 앱이라<br>
+        통합 화면 안에서는 열 수 없습니다.
+      </div>
+      <button onclick="openCurrentNewTab()" style="border:0;background:#0f2b46;color:#fff;border-radius:10px;padding:12px 22px;font-size:13px;font-weight:800;cursor:pointer;">
+        새 창에서 열기 ↗
+      </button>
+      <div style="font-size:10px;color:#94a3b8;margin-top:16px;">Streamlit 앱을 Public으로 변경하면 이 영역에서 바로 열 수 있습니다.</div>
+    </div>
+  </div>
+
   <iframe id="toolFrame" title="YMS Tool" allow="clipboard-read; clipboard-write; fullscreen" referrerpolicy="strict-origin-when-cross-origin"></iframe>
   <div class="frame-message" id="frameMessage">페이지가 보이지 않으면 우측 상단의 <b>새 창</b> 버튼으로 열어주세요.</div>
 </section>
@@ -85,10 +100,10 @@ button{font:inherit}.app{display:flex;height:100vh;overflow:hidden}
 <script>
 const tools={
   word:{name:'Word Test',url:'https://ddkimhere.github.io/yms-word-test/',icon:'W',desc:'영어 단어 시험'},
-  evaluation:{name:'Evaluation',url:'https://ymsevaluation.streamlit.app/',embedUrl:'https://ymsevaluation.streamlit.app/?embed=true',icon:'E',desc:'학생 평가 도구'},
+  evaluation:{name:'Evaluation',url:'https://ymsevaluation.streamlit.app/',embedUrl:'https://ymsevaluation.streamlit.app/?embed=true',icon:'E',desc:'학생 평가 도구',externalOnly:true},
   grammar:{name:'Grammar',url:'https://ddkimhere.github.io/Grammar-Training/',icon:'G',desc:'문법 시험 생성'},
   monthly:{name:'Monthly Test',url:'https://ddkimhere.github.io/TEST/',icon:'M',desc:'월간 테스트'},
-  moak:{name:'Moak Test',url:'https://mock-modify.streamlit.app/',embedUrl:'https://mock-modify.streamlit.app/?embed=true',icon:'M',desc:'모의고사 변형'},
+  moak:{name:'Moak Test',url:'https://mock-modify.streamlit.app/',embedUrl:'https://mock-modify.streamlit.app/?embed=true',icon:'M',desc:'모의고사 변형',externalOnly:true},
   book:{name:'Book Review',url:'https://ddkimhere.github.io/book-review/',icon:'B',desc:'독서 활동 및 리뷰'}
 };
 let currentKey='home';
@@ -99,6 +114,7 @@ function setActiveButton(key){
 function openHome(){
   currentKey='home'; setActiveButton('home');
   document.getElementById('homeScreen').style.display='block';
+  document.getElementById('externalScreen').style.display='none';
   document.getElementById('toolFrame').style.display='none';
   document.getElementById('frameMessage').style.display='none';
   document.getElementById('pageTitle').textContent='Home';
@@ -110,22 +126,41 @@ function openHome(){
 function openTool(key){
   const tool=tools[key]; if(!tool)return;
   currentKey=key; setActiveButton(key);
+
   document.getElementById('homeScreen').style.display='none';
-  const frame=document.getElementById('toolFrame');
-  frame.style.display='block'; frame.src=tool.embedUrl || tool.url;
+  document.getElementById('frameMessage').style.display='none';
   document.getElementById('pageTitle').textContent=tool.name;
   document.getElementById('pageUrl').textContent=tool.url;
-  document.getElementById('refreshBtn').style.display='inline-block';
   document.getElementById('newTabBtn').style.display='inline-block';
-  const msg=document.getElementById('frameMessage');
-  msg.style.display='block';
-  setTimeout(()=>{if(currentKey===key)msg.style.display='none'},5500);
+
+  const frame=document.getElementById('toolFrame');
+  const external=document.getElementById('externalScreen');
+
+  if(tool.externalOnly){
+    frame.style.display='none';
+    frame.src='about:blank';
+    external.style.display='flex';
+    document.getElementById('externalTitle').textContent=tool.name;
+    document.getElementById('externalIcon').textContent=tool.icon;
+    document.getElementById('refreshBtn').style.display='none';
+  }else{
+    external.style.display='none';
+    frame.style.display='block';
+    frame.src=tool.embedUrl || tool.url;
+    document.getElementById('refreshBtn').style.display='inline-block';
+
+    const msg=document.getElementById('frameMessage');
+    msg.style.display='block';
+    setTimeout(()=>{if(currentKey===key)msg.style.display='none'},5500);
+  }
+
   closeSidebar();
 }
 function refreshCurrent(){
   if(currentKey==='home')return;
-  const frame=document.getElementById('toolFrame');
   const tool=tools[currentKey];
+  if(tool.externalOnly)return;
+  const frame=document.getElementById('toolFrame');
   const frameUrl=tool.embedUrl || tool.url;
   frame.src='about:blank'; setTimeout(()=>frame.src=frameUrl,50);
 }
