@@ -45,6 +45,7 @@ button{font:inherit}.app{display:flex;height:100vh;overflow:hidden}
     <button class="nav-btn" data-key="monthly" onclick="openTool('monthly')"><span class="nav-icon">M</span><span>Monthly Test</span></button>
     <button class="nav-btn" data-key="moak" onclick="openTool('moak')"><span class="nav-icon">M</span><span>Moak Test</span></button>
     <button class="nav-btn" data-key="book" onclick="openTool('book')"><span class="nav-icon">B</span><span>Book Review</span></button>
+    <button class="nav-btn" data-key="school" onclick="openTool('school')"><span class="nav-icon">S</span><span>School-Test</span></button>
   </nav>
   <div class="sidebar-footer">YMS Teacher Tools</div>
 </aside>
@@ -104,7 +105,8 @@ const tools={
   grammar:{name:'Grammar',url:'https://ddkimhere.github.io/Grammar-Training/',icon:'G',desc:'문법 시험 생성'},
   monthly:{name:'Monthly Test',url:'https://ddkimhere.github.io/TEST/',icon:'M',desc:'월간 테스트'},
   moak:{name:'Moak Test',url:'https://mock-modify.streamlit.app/',embedUrl:'https://mock-modify.streamlit.app/?embed=true',icon:'M',desc:'모의고사 변형',externalOnly:true},
-  book:{name:'Book Review',url:'https://ddkimhere.github.io/book-review/',icon:'B',desc:'독서 활동 및 리뷰'}
+  book:{name:'Book Review',url:'https://ddkimhere.github.io/book-review/',icon:'B',desc:'독서 활동 및 리뷰'},
+  school:{name:'School-Test',url:'https://ddkimhere.github.io/school-test/',icon:'S',desc:'학교별 내신 테스트'}
 };
 let currentKey='home';
 
