@@ -41,6 +41,7 @@ button{font:inherit}.app{display:flex;height:100vh;overflow:hidden}
     <div class="menu-title" style="margin-top:16px">TOOLS</div>
     <button class="nav-btn" data-key="word" onclick="openTool('word')"><span class="nav-icon">W</span><span>Word Test</span></button>
     <button class="nav-btn" data-key="evaluation" onclick="openTool('evaluation')"><span class="nav-icon">E</span><span>Evaluation</span></button>
+    <button class="nav-btn" data-key="mid" onclick="openTool('mid')"><span class="nav-icon">M</span><span>Mid-Evaluation</span></button>
     <button class="nav-btn" data-key="grammar" onclick="openTool('grammar')"><span class="nav-icon">G</span><span>Grammar</span></button>
     <button class="nav-btn" data-key="monthly" onclick="openTool('monthly')"><span class="nav-icon">M</span><span>Monthly Test</span></button>
     <button class="nav-btn" data-key="moak" onclick="openTool('moak')"><span class="nav-icon">M</span><span>Moak Test</span></button>
@@ -102,6 +103,7 @@ button{font:inherit}.app{display:flex;height:100vh;overflow:hidden}
 const tools={
   word:{name:'Word Test',url:'https://ddkimhere.github.io/yms-word-test/',icon:'W',desc:'영어 단어 시험'},
   evaluation:{name:'Evaluation',url:'https://ymsevaluation.streamlit.app/',embedUrl:'https://ymsevaluation.streamlit.app/?embed=true',icon:'E',desc:'학생 평가 도구',externalOnly:true},
+  mid:{name:'Mid-Evaluation',url:'https://ddkimhere.github.io/yms-growth-test/',icon:'M',desc:'중간 평가 도구'},
   grammar:{name:'Grammar',url:'https://ddkimhere.github.io/Grammar-Training/',icon:'G',desc:'문법 시험 생성'},
   monthly:{name:'Monthly Test',url:'https://ddkimhere.github.io/TEST/',icon:'M',desc:'월간 테스트'},
   moak:{name:'Moak Test',url:'https://mock-modify.streamlit.app/',embedUrl:'https://mock-modify.streamlit.app/?embed=true',icon:'M',desc:'모의고사 변형',externalOnly:true},
